@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -40,8 +41,26 @@ public class TodoController {
     }
 
     @GetMapping
-    public List<Todo> readAllTodo() {
-        return todoService.readAllTodo();
+    public ResponseEntity<Map<String, Object>> readAllTodo(
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size,
+            @RequestParam(value = "offset", defaultValue = "0", required = false) int offset
+    ) {
+
+        List<Todo> result = todoService.readAllTodo();
+        Map<String, Object> paging = new HashMap<>();
+        paging.put("page", page);
+        paging.put("size", size);
+        paging.put("offset", offset);
+        paging.put("hasNext", true);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", result);
+        response.put("status", "success");
+        response.put("statusCode", 200);
+        response.put("paging", paging);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
