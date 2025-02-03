@@ -42,17 +42,17 @@ public class TodoController {
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> readAllTodo(
-            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(value = "size", defaultValue = "10", required = false) int size,
-            @RequestParam(value = "offset", defaultValue = "0", required = false) int offset
+            @RequestParam(value = "page", defaultValue = "1", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size
     ) {
 
         List<Todo> result = todoService.readAllTodo();
+        boolean hasNext = todoService.hasNext(result.size(), size, page);
         Map<String, Object> paging = new HashMap<>();
         paging.put("page", page);
         paging.put("size", size);
-        paging.put("offset", offset);
-        paging.put("hasNext", true);
+        paging.put("offset", (page - 1) * size);
+        paging.put("hasNext", hasNext);
 
         Map<String, Object> response = new HashMap<>();
         response.put("result", result);

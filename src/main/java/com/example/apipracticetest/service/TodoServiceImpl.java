@@ -23,6 +23,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public List<Todo> readAllTodo() {
+
         return todoRepository.findAllTodo();
     }
 
@@ -39,5 +40,11 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void deleteTodo(long id) {
         todoRepository.deleteTodo(id);
+    }
+
+    @Override
+    public boolean hasNext(int dataSize, int pageSize, int page) {
+        int totalPages = (int) Math.ceil((double) dataSize / pageSize);
+        return totalPages > page;
     }
 }

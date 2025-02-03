@@ -15,4 +15,6 @@ public interface TodoService {
     void updateTodo(Todo todo);
 
     void deleteTodo(long id);
+
+    boolean hasNext(int dataSize, int pageSize, int page);
 }
