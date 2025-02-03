@@ -45,17 +45,38 @@ public class TodoController {
     }
 
     @GetMapping("/{id}")
-    public Todo readOneTodo(@PathVariable long id) {
-        return todoService.readOneTodo(id);
+    public ResponseEntity<Map<String, Object>> readOneTodo(@PathVariable long id) {
+
+        Todo result = todoService.readOneTodo(id);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", result);
+        response.put("status", "success");
+        response.put("statusCode", 200);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public void updateTodo(@PathVariable long id, @RequestBody Todo updateTodo) {
+    public ResponseEntity<Map<String, Object>> updateTodo(@PathVariable long id, @RequestBody Todo updateTodo) {
+        updateTodo.setId(id);
         todoService.updateTodo(updateTodo);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("statusCode", 200);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTodo(@PathVariable long id) {
+    public ResponseEntity<Map<String, Object>> deleteTodo(@PathVariable long id) {
         todoService.deleteTodo(id);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("statusCode", 200);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
